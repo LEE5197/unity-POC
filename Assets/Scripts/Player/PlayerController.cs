@@ -9,10 +9,11 @@ public class PlayerController : MonoBehaviour
 	private PlayerIdleState idleState;
 	private PlayerMoveState moveState;
 	private PlayerJumpState jumpState;
-	private Animator anim;
-
-	private PlayerCollision coll;
-	public Rigidbody2D rigid;
+    private PlayerCollision coll;
+    
+	public Animator anim { get; private set; }
+	public Rigidbody2D rigid { get; private set; }
+	public SpriteRenderer render { get; private set; }
     public Vector2 moveDir { get; private set; }
 	public bool isJump { get; private set; }
 
@@ -26,28 +27,25 @@ public class PlayerController : MonoBehaviour
 		idleState = new PlayerIdleState(this);
 		moveState = new PlayerMoveState(this);
 		jumpState = new PlayerJumpState(this);
+
 		anim = GetComponent<Animator>();
 		rigid = GetComponent<Rigidbody2D>();
-		playerFSM.changeState(idleState);
+        coll = GetComponent<PlayerCollision>();
+		render = GetComponent<SpriteRenderer>();
 
-		coll = GetComponent<PlayerCollision>();
+        playerFSM.changeState(idleState);
 	}
 
 	private void Update()
 	{
 		if (coll.onGround && moveDir.x == 0 && !isJump) playerFSM.changeState(idleState);
 		else if (coll.onGround && moveDir.x != 0 && !isJump) playerFSM.changeState(moveState);
-		else if (coll.onGround && isJump)
-		{
-			playerFSM.changeState(jumpState);
-			Jump();
-		}
+		else if (coll.onGround && isJump) playerFSM.changeState(jumpState);
 		playerFSM.curstate.Update();
 	}
 
 	private void FixedUpdate()
 	{
-		Move();
 		playerFSM.curstate.FixedUpdate();
 	}
 
@@ -58,13 +56,4 @@ public class PlayerController : MonoBehaviour
 		Debug.Log(isJump);
 	}
 
-	private void Move()
-	{
-		rigid.velocity = new Vector2(moveDir.x * moveSpeed, rigid.velocity.y);
-	}
-
-	private void Jump()
-	{
-		rigid.AddForce(Vector2.up * jumpForce);
-	}
 }

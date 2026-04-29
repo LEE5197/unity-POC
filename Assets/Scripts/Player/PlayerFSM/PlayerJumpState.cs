@@ -6,6 +6,7 @@ public class PlayerJumpState : IState
 	public PlayerJumpState(PlayerController player) => this.player = player;
 	public void Enter()
 	{
+		Jump();
 		Debug.Log("Run Jump Enter");
 	}
 
@@ -21,7 +22,18 @@ public class PlayerJumpState : IState
 
 	public void FixedUpdate()
 	{
-
+		Move();
 	}
 
+	private void Jump()
+	{
+		player.rigid.AddForce(Vector2.up * player.jumpForce, ForceMode2D.Impulse);
+	}
+
+    private void Move()
+    {
+        float moveSpeed = Mathf.Lerp(player.rigid.velocity.x, player.moveDir.x * player.moveSpeed, Time.deltaTime * 15f);
+
+        player.rigid.velocity = new Vector2(moveSpeed, player.rigid.velocity.y);
+    }
 }

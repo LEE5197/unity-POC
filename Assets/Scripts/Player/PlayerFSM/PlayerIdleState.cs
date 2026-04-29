@@ -9,6 +9,7 @@ public class PlayerIdleState : IState
 	}
 	public void Enter()
 	{
+		player.anim.Play("idle");
 		Debug.Log("Idle State Enter");
 	}
 
@@ -24,6 +25,13 @@ public class PlayerIdleState : IState
 
 	public void FixedUpdate()
 	{
-
+		Move();
 	}
+
+    private void Move()
+    {
+        float moveSpeed = Mathf.Lerp(player.rigid.velocity.x, player.moveDir.x * player.moveSpeed, Time.deltaTime * 20f);
+
+        player.rigid.velocity = new Vector2(moveSpeed, player.rigid.velocity.y);
+    }
 }
