@@ -3,19 +3,19 @@ using UnityEngine;
 public class PlayerIdleState : IState
 {
 	PlayerController player;
+	private int anim = Animator.StringToHash("idle");
 	public PlayerIdleState(PlayerController player)
 	{
 		this.player = player;
 	}
 	public void Enter()
 	{
-		player.anim.Play("idle");
-		Debug.Log("Idle State Enter");
+		player.anim.Play(anim);
 	}
 
 	public void Exit()
 	{
-		Debug.Log("Idle State Exit");
+	
 	}
 
 	public void Update()

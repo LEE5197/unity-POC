@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 	private PlayerIdleState idleState;
 	private PlayerMoveState moveState;
 	private PlayerJumpState jumpState;
+	private PlayerFallState fallState;
+
     private PlayerCollision coll;
     
 	public Animator anim { get; private set; }
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
 		idleState = new PlayerIdleState(this);
 		moveState = new PlayerMoveState(this);
 		jumpState = new PlayerJumpState(this);
+		fallState = new PlayerFallState(this);
 
 		anim = GetComponent<Animator>();
 		rigid = GetComponent<Rigidbody2D>();
@@ -41,7 +44,9 @@ public class PlayerController : MonoBehaviour
 		if (coll.onGround && moveDir.x == 0 && !isJump) playerFSM.changeState(idleState);
 		else if (coll.onGround && moveDir.x != 0 && !isJump) playerFSM.changeState(moveState);
 		else if (coll.onGround && isJump) playerFSM.changeState(jumpState);
-		playerFSM.curstate.Update();
+		else if (!coll.onGround && rigid.velocity.y < 0) playerFSM.changeState(fallState);
+
+			playerFSM.curstate.Update();
 	}
 
 	private void FixedUpdate()

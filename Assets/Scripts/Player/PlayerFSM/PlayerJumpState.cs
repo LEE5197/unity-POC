@@ -4,10 +4,11 @@ public class PlayerJumpState : IState
 {
 	private PlayerController player;
 	public PlayerJumpState(PlayerController player) => this.player = player;
+	private int anim = Animator.StringToHash("jump");
 	public void Enter()
 	{
 		Jump();
-		Debug.Log("Run Jump Enter");
+		player.anim.Play(anim);
 	}
 
 	public void Exit()

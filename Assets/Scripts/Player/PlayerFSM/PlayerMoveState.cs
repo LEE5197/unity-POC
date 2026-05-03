@@ -4,10 +4,10 @@ public class PlayerMoveState : IState
 {
 	private PlayerController player;
 	public PlayerMoveState(PlayerController player) => this.player = player;
+	private int anim = Animator.StringToHash("run");
 	public void Enter()
 	{
-		player.anim.Play("run");
-		Debug.Log("Run State Enter");
+		player.anim.Play(anim);
 	}
 
 	public void Exit()
