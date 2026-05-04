@@ -3,8 +3,16 @@ using UnityEngine;
 public class PlayerJumpState : IState
 {
 	private PlayerController player;
-	public PlayerJumpState(PlayerController player) => this.player = player;
-	private int anim = Animator.StringToHash("jump");
+	Vector2 jumpDir;
+	float jumpForce;
+    public PlayerJumpState(PlayerController player)
+	{
+		this.player = player;
+        jumpDir = Vector2.up;
+        jumpForce = player.jumpForce;
+	}
+
+    private int anim = Animator.StringToHash("jump");
 	public void Enter()
 	{
 		Jump();
@@ -28,7 +36,9 @@ public class PlayerJumpState : IState
 
 	private void Jump()
 	{
-		player.rigid.AddForce(Vector2.up * player.jumpForce, ForceMode2D.Impulse);
+
+
+		player.rigid.AddForce(jumpDir * jumpForce, ForceMode2D.Impulse);
 	}
 
     private void Move()

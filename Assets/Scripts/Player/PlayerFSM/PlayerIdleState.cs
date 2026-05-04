@@ -11,6 +11,8 @@ public class PlayerIdleState : IState
 	public void Enter()
 	{
 		player.anim.Play(anim);
+		if (player.moveDir.x == 1) player.render.flipX = false;
+		else if (player.moveDir.x == -1) player.render.flipX = true;
 	}
 
 	public void Exit()
