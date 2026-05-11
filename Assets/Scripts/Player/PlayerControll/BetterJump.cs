@@ -12,11 +12,21 @@ public class BetterJump : MonoBehaviour
     void Start()
     {
         player = GetComponent<PlayerController>();
-        rb = player.rigid;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
+		if (player == null)
+		{
+            Debug.Log("player is null");
+            return;
+		}
+		if (rb == null)
+		{
+            Debug.Log("rigid is null");
+            return;
+		}
         if (rb.velocity.y < 0 || (rb.velocity.y > 0 && !player.isJump))
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * fallMultiplier * Time.deltaTime;
